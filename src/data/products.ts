@@ -985,7 +985,7 @@ export const REVIEWS = [
     rating: 5,
     text: "Being from Faisalabad (the textile hub), I'm very picky about bedsheet weave. Loom & Living exceeded my expectations. Thread count and stitch quality is top tier.",
     productName: "Urban Stripe Bedsheet Set",
-    productImage: "/images/products/urban-stripe.jpg",
+    productImage: "/images/reviews/review-zainab.jpg",
     date: "19 May, 2026",
   },
   {
@@ -996,7 +996,7 @@ export const REVIEWS = [
     rating: 5,
     text: "Waffle cotton blanket is incredibly breathable! AC mein use karne ke liye perfect weight hai, neither too heavy nor too light. Pure cotton texture looks super aesthetic on the bed.",
     productName: "Waffle Weave 100% Cotton Blanket",
-    productImage: "/images/products/waffle-cotton-blanket.jpg",
+    productImage: "/images/reviews/review-fatima.jpg",
     date: "22 May, 2026",
   },
   {
@@ -1007,7 +1007,7 @@ export const REVIEWS = [
     rating: 5,
     text: "Ordered 2 pairs of hotel gusseted pillows. Neck support is unmatched — exactly like high-end Marriott hotel bedding. No flattening even after weeks of use. 10/10 Pakistani brand!",
     productName: "5-Star Hotel Gusseted Pillow Pair",
-    productImage: "/images/products/hotel-down-pillows.jpg",
+    productImage: "/images/reviews/review-bilal.jpg",
     date: "25 May, 2026",
   },
 ];

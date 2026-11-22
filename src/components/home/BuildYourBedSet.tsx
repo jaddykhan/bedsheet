@@ -20,7 +20,7 @@ export function BuildYourBedSet() {
     "Pure Cotton": {
       name: "Pure Cotton",
       image: "/images/fabrics/pure-cotton.jpg",
-      previewBed: "/images/hero/hero-bedroom.jpg",
+      previewBed: "/images/hero/customizer-bed.jpg",
       basePrice: 2200, // Bedsheet
       pillowPrice: 600, // 2 Pillows
       comforterPrice: 2800, // Comforter
@@ -30,7 +30,7 @@ export function BuildYourBedSet() {
     "Polycotton": {
       name: "Polycotton",
       image: "/images/fabrics/polycotton.jpg",
-      previewBed: "/images/categories/plain-essentials.jpg",
+      previewBed: "/images/hero/customizer-bed-olive.jpg",
       basePrice: 1800,
       pillowPrice: 500,
       comforterPrice: 2200,
@@ -40,7 +40,7 @@ export function BuildYourBedSet() {
     "Satin": {
       name: "Satin",
       image: "/images/fabrics/satin.jpg",
-      previewBed: "/images/products/indigo-heritage.jpg",
+      previewBed: "/images/hero/customizer-bed-satin.jpg",
       basePrice: 2900,
       pillowPrice: 900,
       comforterPrice: 3800,
