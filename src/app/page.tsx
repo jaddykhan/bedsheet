@@ -6,7 +6,6 @@ import { Footer } from "@/components/layout/Footer";
 
 // Homepage Sections
 import { HeroSection } from "@/components/home/HeroSection";
-import { TrustBenefitsStrip } from "@/components/home/TrustBenefitsStrip";
 import { ShopByCategory } from "@/components/home/ShopByCategory";
 import { BestsellingBedsheets } from "@/components/home/BestsellingBedsheets";
 import { BuildYourBedSet } from "@/components/home/BuildYourBedSet";
@@ -27,13 +26,10 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-1">
-        {/* 1. HERO CAROUSEL & BANNER */}
+        {/* 1. HERO CAROUSEL WITH INTEGRATED TRUST BAR (FULL FIRST VIEW) */}
         <HeroSection />
 
-        {/* 2. TRUST BENEFITS STRIP */}
-        <TrustBenefitsStrip />
-
-        {/* 3. SHOP BY CATEGORY */}
+        {/* 2. SHOP BY CATEGORY */}
         <ShopByCategory />
 
         {/* 4. BESTSELLING BEDSHEETS */}
