@@ -9,308 +9,423 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
-  ShieldCheck,
-  Truck,
-  RotateCcw,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
-interface HeroSlide {
+export interface HeroSlideData {
   id: string;
   badge: string;
-  title: string;
-  titleHighlight?: string;
-  description: string;
+  titleLine1: string;
+  titleLine2: string;
+  subtitle: string;
   image: string;
-  specPill: string;
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href?: string; isVideo?: boolean };
 }
 
-const SLIDES: HeroSlide[] = [
+export interface FloatingCardData {
+  title: string;
+  slug: string;
+  image: string;
+}
+
+const HERO_SLIDES: HeroSlideData[] = [
   {
     id: "slide-1",
-    badge: "NEW SEASON 2026",
-    title: "Bedsheets for",
-    titleHighlight: "Every Home",
-    description:
-      "Crafted with 100% long-staple Pakistani combed cotton. Breathable, vibrant botanicals, and deep-pocket fitted cuts made for Pakistani mattresses.",
-    image: "/images/hero/hero-bedroom.jpg",
-    specPill: "100% Long-Staple Combed Cotton • 200 TC Percale",
-    primaryCta: { label: "Shop Bedsheets", href: "/collections" },
-    secondaryCta: { label: "Watch Craftsmanship", isVideo: true },
+    badge: "NEW SEASON COLLECTION",
+    titleLine1: "Bedsheets for",
+    titleLine2: "Every Home",
+    subtitle:
+      "Premium Pakistani bedsheets in beautiful prints, soft fabrics and perfect fits.",
+    image: "/images/hero/hero-slide-1-landscape.jpg",
+    primaryCta: { label: "Shop Collection", href: "/collections" },
+    secondaryCta: { label: "Watch Lookbook", isVideo: true },
   },
   {
     id: "slide-2",
-    badge: "WINTER & ALL-SEASON LUXURY",
-    title: "Thermal Waffle",
-    titleHighlight: "Blankets & Throws",
-    description:
-      "Dimensional honeycomb waffle knits and plush cloud sherpa throws. Engineered for perfect temperature regulation under AC or cool winter nights.",
-    image: "/images/products/waffle-cotton-blanket.jpg",
-    specPill: "350 GSM Breathable Thermal Knit • Pure Cotton",
-    primaryCta: { label: "Explore Blankets", href: "/collections/blankets-throws" },
-    secondaryCta: { label: "View Bed Sets", href: "/build-your-bed" },
+    badge: "EVERYDAY COTTON ESSENTIALS",
+    titleLine1: "Comfort in",
+    titleLine2: "Every Thread",
+    subtitle:
+      "Discover everyday luxury with beautifully crafted cotton bedsheets.",
+    image: "/images/hero/hero-slide-2-landscape.jpg",
+    primaryCta: { label: "Explore Collection", href: "/collections/plain-essentials" },
+    secondaryCta: { label: "Watch Lookbook", isVideo: true },
   },
   {
     id: "slide-3",
-    badge: "HOTEL SIGNATURE COLLECTION",
-    title: "5-Star Luxury",
-    titleHighlight: "Satin Stripe Sets",
-    description:
-      "Woven with a silky four-over-one sateen float yarn. The exact opulent crisp hotel bed linen chosen by Pakistan's premier 5-star suites.",
-    image: "/images/categories/luxury-collection.jpg",
-    specPill: "400 TC Egyptian Sateen Feel • Anti-Frizz Luster",
-    primaryCta: { label: "Shop Hotel Sateen", href: "/collections/hotel-white-stripes" },
-    secondaryCta: { label: "Explore Bridal", href: "/collections/bridal-collection" },
+    badge: "HERITAGE & LUXURY SUITES",
+    titleLine1: "A Touch of",
+    titleLine2: "Timeless Elegance",
+    subtitle:
+      "Discover heritage-inspired patterns for your beautiful home.",
+    image: "/images/hero/hero-slide-3-landscape.jpg",
+    primaryCta: { label: "Discover More", href: "/collections/luxury-collection" },
+    secondaryCta: { label: "Fabric Guide", href: "/fabric-guide" },
+  },
+];
+
+const FLOATING_COLLECTION_CARDS: FloatingCardData[] = [
+  {
+    title: "Printed Collection",
+    slug: "printed-bedsheets",
+    image: "/images/hero/cards/card-printed.jpg",
   },
   {
-    id: "slide-4",
-    badge: "CLOUD SLEEP ESSENTIALS",
-    title: "Gusseted Down",
-    titleHighlight: "Pillows & Silk Cases",
-    description:
-      "2-inch structural gusset pillows with siliconized micro-down fibers paired with pure Grade 6A Mulberry silk pillowcases for anti-wrinkle beauty rest.",
-    image: "/images/products/hotel-down-pillows.jpg",
-    specPill: "Ergonomic Neck Cradle • Hypoallergenic Microfiber",
-    primaryCta: { label: "Shop Pillows", href: "/collections/pillows-cushions" },
-    secondaryCta: { label: "Size Guide", href: "/size-guide" },
+    title: "Plain & Essentials",
+    slug: "plain-essentials",
+    image: "/images/hero/cards/card-plain.jpg",
+  },
+  {
+    title: "Luxury Collection",
+    slug: "luxury-collection",
+    image: "/images/hero/cards/card-luxury.jpg",
+  },
+  {
+    title: "Bridal Collection",
+    slug: "bridal-collection",
+    image: "/images/hero/cards/card-bridal.jpg",
   },
 ];
 
 export function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
-  const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
+  const [lookbookModalOpen, setLookbookModalOpen] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
 
-  const SLIDE_DURATION = 6000; // 6 seconds
+  // Touch Swipe coordinates
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  const SLIDE_INTERVAL = 6000; // 6 seconds auto-transition
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const totalSlides = HERO_SLIDES.length;
 
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
-  }, []);
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  }, [totalSlides]);
 
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
-  }, []);
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  }, [totalSlides]);
 
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  // Autoplay management with pause-on-hover / pause-on-focus
   useEffect(() => {
-    if (isPaused) return;
-    autoPlayRef.current = setInterval(() => {
+    if (isPaused || lookbookModalOpen) {
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
+      return;
+    }
+
+    autoPlayTimerRef.current = setInterval(() => {
       nextSlide();
-    }, SLIDE_DURATION);
+    }, SLIDE_INTERVAL);
 
     return () => {
-      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
     };
-  }, [nextSlide, isPaused]);
+  }, [nextSlide, isPaused, lookbookModalOpen]);
 
-  const slide = SLIDES[currentSlide];
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lookbookModalOpen) return;
+      if (e.key === "ArrowLeft") {
+        prevSlide();
+      } else if (e.key === "ArrowRight") {
+        nextSlide();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nextSlide, prevSlide, lookbookModalOpen]);
+
+  // Touch swipe handling
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const diff = touchStartX.current - touchEndX.current;
+    if (diff > 50) {
+      // Swiped left -> next
+      nextSlide();
+    } else if (diff < -50) {
+      // Swiped right -> prev
+      prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  const currentData = HERO_SLIDES[currentSlide];
 
   return (
     <section
-      className="relative w-full bg-[#F8F6F1] overflow-hidden border-b border-[#E8DED0]/70 select-none"
+      className="relative w-full h-[calc(100svh-104px)] min-h-[640px] xl:min-h-[720px] max-h-[920px] overflow-hidden select-none bg-[#FAF8F5]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       aria-roledescription="carousel"
-      aria-label="Loom & Living Featured Hero Carousel"
+      aria-label="Loom & Living Luxury Hero Slider"
     >
-      <div className="container-custom pt-4 pb-12 lg:pt-8 lg:pb-16">
-        <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-[32px] overflow-hidden bg-[#FAF7F2] border border-[#E8DED0] shadow-sm">
+      {/* 1. EDGE-TO-EDGE PHOTOGRAPHY BACKGROUND SLIDES */}
+      <div className="absolute inset-0 w-full h-full">
+        {HERO_SLIDES.map((slide, index) => {
+          const isActive = index === currentSlide;
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-900 ease-in-out ${
+                isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+              }`}
+              aria-hidden={!isActive}
+            >
+              <Image
+                src={slide.image}
+                alt={`${slide.titleLine1} ${slide.titleLine2}`}
+                fill
+                priority={index === 0}
+                className={`object-cover object-center transition-transform duration-[7000ms] ease-out ${
+                  isActive ? "scale-105" : "scale-100"
+                }`}
+                sizes="100vw"
+                quality={90}
+              />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] items-center">
-            {/* Left Content Area */}
-            <div className="lg:col-span-5 p-6 sm:p-10 lg:p-14 z-20 flex flex-col justify-between h-full">
-              <div className="space-y-4 sm:space-y-6">
-                {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#E8DED0]/60 border border-[#D5C7B6] w-fit animate-in fade-in duration-500">
-                  <Sparkles className="w-3.5 h-3.5 text-[#B88B72]" />
-                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#526453]">
-                    {slide.badge}
-                  </span>
-                </div>
+              {/* Editorial Left-to-Right Ambient Wash: Ensures Pristine Typography Legibility */}
+              <div
+                className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/92 via-[#FAF8F5]/65 sm:via-[#FAF8F5]/45 to-transparent w-full lg:w-[65%] pointer-events-none"
+                aria-hidden="true"
+              />
 
-                {/* Main Headline */}
-                <h1 className="font-serif text-4xl sm:text-5xl lg:text-[56px] font-medium text-[#292D29] leading-[1.08] tracking-tight">
-                  {slide.title}{" "}
-                  <span className="italic font-normal text-[#2F4325] block sm:inline">
-                    {slide.titleHighlight}
-                  </span>
-                </h1>
-
-                {/* Subtitle / Description */}
-                <p className="text-sm sm:text-base lg:text-lg text-[#5C6656] max-w-md font-normal leading-relaxed">
-                  {slide.description}
-                </p>
-
-                {/* CTAs */}
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
-                  <Link
-                    href={slide.primaryCta.href}
-                    className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-full bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md active:scale-95 group"
-                  >
-                    <span>{slide.primaryCta.label}</span>
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </Link>
-
-                  {slide.secondaryCta.isVideo ? (
-                    <button
-                      onClick={() => setVideoModalOpen(true)}
-                      className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-full border border-[#292D29]/30 bg-white/60 hover:bg-white text-[#292D29] text-sm font-medium transition-all shadow-xs"
-                    >
-                      <Play className="w-3.5 h-3.5 fill-[#292D29]" />
-                      <span>{slide.secondaryCta.label}</span>
-                    </button>
-                  ) : (
-                    <Link
-                      href={slide.secondaryCta.href || "/collections"}
-                      className="inline-flex items-center gap-2 px-5 sm:px-6 py-3.5 rounded-full border border-[#292D29]/30 bg-white/60 hover:bg-white text-[#292D29] text-sm font-medium transition-all shadow-xs"
-                    >
-                      <span>{slide.secondaryCta.label}</span>
-                    </Link>
-                  )}
-                </div>
-              </div>
-
-              {/* Slide Counter & Progress Controls */}
-              <div className="flex items-center justify-between pt-8 mt-6 border-t border-[#E8DED0]/80">
-                <div className="flex items-center gap-3">
-                  <span className="font-serif text-lg font-bold text-[#292D29]">
-                    0{currentSlide + 1}
-                  </span>
-                  <span className="text-xs text-[#8C9388]">/ 0{SLIDES.length}</span>
-
-                  {/* Progress Line Bars */}
-                  <div className="flex items-center gap-1.5 ml-2">
-                    {SLIDES.map((_, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentSlide(idx)}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          currentSlide === idx
-                            ? "w-8 bg-[#2F4325]"
-                            : "w-2.5 bg-[#D5C7B6] hover:bg-[#8C9388]"
-                        }`}
-                        aria-label={`Go to slide ${idx + 1}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                {/* Arrow Controls */}
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={prevSlide}
-                    className="w-9 h-9 rounded-full bg-white border border-[#E8DED0] flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-colors shadow-xs active:scale-95"
-                    aria-label="Previous slide"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={nextSlide}
-                    className="w-9 h-9 rounded-full bg-white border border-[#E8DED0] flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-colors shadow-xs active:scale-95"
-                    aria-label="Next slide"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
+              {/* Bottom Subtle Vignette for Floating Cards */}
+              <div
+                className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/25 via-black/5 to-transparent pointer-events-none"
+                aria-hidden="true"
+              />
             </div>
+          );
+        })}
+      </div>
 
-            {/* Right Photographic Showcase */}
-            <div className="lg:col-span-7 relative h-72 sm:h-96 lg:h-full min-h-[340px] sm:min-h-[420px] lg:min-h-[620px] w-full overflow-hidden bg-[#E8DED0]">
-              {SLIDES.map((s, idx) => (
-                <div
-                  key={s.id}
-                  className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                    currentSlide === idx ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
-                  }`}
-                >
-                  <Image
-                    src={s.image}
-                    alt={s.title}
-                    fill
-                    priority={idx === 0}
-                    className="object-cover transition-transform duration-1000 scale-100 hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 60vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+      {/* 2. CIRCULAR NAVIGATION ARROWS (Vertically Centered on Edges) */}
+      <div className="absolute inset-y-0 left-3 sm:left-6 lg:left-8 flex items-center z-30 pointer-events-none">
+        <button
+          onClick={prevSlide}
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-md border border-[#E8DED0]/80 shadow-md flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-300 pointer-events-auto active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" />
+        </button>
+      </div>
 
-                  {/* Floating Spec Pill */}
-                  <div className="absolute bottom-5 left-5 right-5 sm:right-auto sm:bottom-6 sm:left-6 bg-white/92 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/60 shadow-lg flex items-center gap-2.5 text-xs font-semibold text-[#292D29] max-w-fit">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
-                    <span className="truncate">{s.specPill}</span>
-                  </div>
+      <div className="absolute inset-y-0 right-3 sm:right-6 lg:right-8 flex items-center z-30 pointer-events-none">
+        <button
+          onClick={nextSlide}
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/90 backdrop-blur-md border border-[#E8DED0]/80 shadow-md flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-300 pointer-events-auto active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" />
+        </button>
+      </div>
+
+      {/* 3. MAIN HERO CONTENT AREA (Container Padded on Left) */}
+      <div className="relative z-20 h-full container-custom flex flex-col justify-between pt-10 sm:pt-14 md:pt-18 pb-6 sm:pb-8">
+        {/* Left Editorial Text & Actions */}
+        <div className="max-w-xl lg:max-w-2xl pl-2 sm:pl-4">
+          {/* Badge with horizontal decorative line */}
+          <div className="flex items-center gap-3 mb-3 sm:mb-4 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#3B4238]">
+              {currentData.badge}
+            </span>
+            <span className="w-10 h-[1.5px] bg-[#3B4238]/40" />
+          </div>
+
+          {/* Large Serif Headline */}
+          <h1 className="font-serif text-[42px] sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[84px] font-normal text-[#1F2E19] leading-[1.04] tracking-tight mb-4 sm:mb-5">
+            <span className="block">{currentData.titleLine1}</span>
+            <span className="block font-medium">{currentData.titleLine2}</span>
+          </h1>
+
+          {/* Subtitle Description */}
+          <p className="font-sans text-sm sm:text-base md:text-lg text-[#3B4238] font-normal leading-relaxed max-w-md sm:max-w-lg mb-6 sm:mb-8">
+            {currentData.subtitle}
+          </p>
+
+          {/* Primary & Secondary Call To Actions */}
+          <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+            {/* Primary Dark Olive Pill Button */}
+            <Link
+              href={currentData.primaryCta.href}
+              className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3.5 rounded-full bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group"
+            >
+              <span>{currentData.primaryCta.label}</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+
+            {/* Secondary Watch Lookbook / Video Pill Button */}
+            {currentData.secondaryCta.isVideo ? (
+              <button
+                onClick={() => setLookbookModalOpen(true)}
+                className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] backdrop-blur-sm transition-all shadow-xs hover:shadow-sm active:scale-95"
+              >
+                <div className="w-4 h-4 rounded-full flex items-center justify-center text-[#2F4325]">
+                  <Play className="w-3.5 h-3.5 fill-[#2F4325] translate-x-0.5" />
                 </div>
-              ))}
-            </div>
+                <span>{currentData.secondaryCta.label}</span>
+              </button>
+            ) : (
+              <Link
+                href={currentData.secondaryCta.href || "/collections"}
+                className="inline-flex items-center gap-2.5 px-5 sm:px-6 py-3.5 rounded-full bg-white/80 hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] backdrop-blur-sm transition-all shadow-xs hover:shadow-sm active:scale-95"
+              >
+                <span>{currentData.secondaryCta.label}</span>
+              </Link>
+            )}
           </div>
         </div>
 
-        {/* Quick Trust Highlights below Slider */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-[#E8DED0] text-[#292D29]">
-            <Truck className="w-5 h-5 text-[#2F4325] shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold block">Free Shipping</span>
-              <span className="text-[#6B7267] text-[11px]">Orders over Rs. 3,000</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-[#E8DED0] text-[#292D29]">
-            <RotateCcw className="w-5 h-5 text-[#2F4325] shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold block">7-Day Returns</span>
-              <span className="text-[#6B7267] text-[11px]">Hassle-free nationwide</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-[#E8DED0] text-[#292D29]">
-            <ShieldCheck className="w-5 h-5 text-[#2F4325] shrink-0" />
-            <div className="text-xs">
-              <span className="font-bold block">100% Genuine Cotton</span>
-              <span className="text-[#6B7267] text-[11px]">Certified combed yarn</span>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/60 border border-[#E8DED0] text-[#292D29]">
-            <span className="w-5 h-5 rounded-full bg-[#2F4325] text-white text-[10px] font-bold flex items-center justify-center shrink-0">
-              COD
-            </span>
-            <div className="text-xs">
-              <span className="font-bold block">Cash on Delivery</span>
-              <span className="text-[#6B7267] text-[11px]">JazzCash & Cards accepted</span>
-            </div>
+        {/* 4. PAGINATION DOTS (Centered horizontally above bottom cards) */}
+        <div className="flex items-center justify-center gap-2 my-2 sm:my-3">
+          {HERO_SLIDES.map((_, idx) => {
+            const isActive = idx === currentSlide;
+            return (
+              <button
+                key={idx}
+                onClick={() => goToSlide(idx)}
+                className={`transition-all duration-300 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                  isActive
+                    ? "w-7 h-2.5 bg-white shadow-md"
+                    : "w-2.5 h-2.5 bg-white/60 hover:bg-white/90 border border-black/10"
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+                aria-current={isActive ? "true" : "false"}
+              />
+            );
+          })}
+        </div>
+
+        {/* 5. FLOATING 4 COLLECTION CARDS (Matching Reference Design) */}
+        <div className="w-full">
+          {/* Desktop 4-Column Grid / Mobile Horizontal Snap Scroll */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4 overflow-x-auto no-scrollbar pb-1">
+            {FLOATING_COLLECTION_CARDS.map((card) => (
+              <Link
+                key={card.title}
+                href={`/collections/${card.slug}`}
+                className="group relative bg-[#FAF7F2]/90 hover:bg-white backdrop-blur-md rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 pr-3 sm:pr-4 border border-white/80 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-between gap-2 sm:gap-3"
+              >
+                {/* Left Bedding Preview Image */}
+                <div className="relative w-16 h-12 sm:w-22 sm:h-16 md:w-24 md:h-16 rounded-xl sm:rounded-2xl overflow-hidden bg-[#E8DED0] shrink-0 border border-white/60 shadow-xs">
+                  <Image
+                    src={card.image}
+                    alt={card.title}
+                    fill
+                    className="object-cover group-hover:scale-108 transition-transform duration-500"
+                    sizes="(max-width: 640px) 70px, 100px"
+                  />
+                </div>
+
+                {/* Card Title */}
+                <span className="font-serif text-xs sm:text-sm md:text-[15px] font-semibold text-[#292D29] group-hover:text-[#2F4325] transition-colors leading-tight min-w-0 truncate">
+                  {card.title}
+                </span>
+
+                {/* Circular Arrow Button */}
+                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white flex items-center justify-center text-[#292D29] shadow-xs group-hover:bg-[#2F4325] group-hover:text-white transition-all duration-300 shrink-0">
+                  <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform group-hover:translate-x-0.5" />
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Video Modal */}
-      {videoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-3xl bg-[#1E2C18] rounded-2xl overflow-hidden shadow-2xl border border-[#2F4325]">
-            <div className="p-4 flex items-center justify-between border-b border-[#2F4325] text-white">
-              <h3 className="font-serif text-lg font-bold">Loom & Living Collection Craftsmanship</h3>
-              <button
-                onClick={() => setVideoModalOpen(false)}
-                className="p-1 rounded-lg text-white/70 hover:text-white"
-                aria-label="Close video"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="relative aspect-video w-full bg-black flex items-center justify-center">
-              <div className="text-center p-6 space-y-3">
-                <div className="w-16 h-16 mx-auto rounded-full bg-[#2F4325] flex items-center justify-center text-white shadow-lg">
-                  <Play className="w-6 h-6 fill-white ml-0.5" />
-                </div>
-                <h4 className="font-serif text-xl text-white">The Loom & Living Textile Story</h4>
-                <p className="text-xs text-[#C8BFB3] max-w-md mx-auto">
-                  From cotton fields in Southern Punjab to traditional rotary printing in Faisalabad, discover the artisan dedication behind each bedsheet.
-                </p>
+      {/* 6. WATCH LOOKBOOK VIDEO MODAL */}
+      {lookbookModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Loom & Living Craftsmanship Story"
+        >
+          <div className="relative w-full max-w-3xl bg-[#1E2C18] rounded-3xl overflow-hidden shadow-2xl border border-[#2F4325]">
+            {/* Modal Header */}
+            <div className="p-4 sm:p-5 flex items-center justify-between border-b border-[#2F4325] text-white">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <h3 className="font-serif text-lg sm:text-xl font-medium tracking-tight">
+                  Loom &amp; Living Textile Lookbook
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setVideoModalOpen(false)}
-                  className="px-5 py-2 rounded-full bg-[#B88B72] text-white text-xs font-semibold hover:bg-[#966750]"
+                  onClick={() => setIsVideoMuted(!isVideoMuted)}
+                  className="p-1.5 rounded-full hover:bg-white/10 text-white/80 transition-colors"
+                  aria-label={isVideoMuted ? "Unmute video" : "Mute video"}
                 >
-                  Close Preview
+                  {isVideoMuted ? (
+                    <VolumeX className="w-5 h-5" />
+                  ) : (
+                    <Volume2 className="w-5 h-5" />
+                  )}
                 </button>
+                <button
+                  onClick={() => setLookbookModalOpen(false)}
+                  className="p-1.5 rounded-full hover:bg-white/10 text-white/80 transition-colors"
+                  aria-label="Close lookbook preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Video Showcase Area */}
+            <div className="relative aspect-video w-full bg-[#121A0F] flex items-center justify-center overflow-hidden">
+              <Image
+                src="/images/hero/hero-slide-1-landscape.jpg"
+                alt="Craftsmanship Video Showcase"
+                fill
+                className="object-cover opacity-65"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+
+              <div className="relative z-10 text-center p-6 space-y-4 max-w-lg">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-[#2F4325] border-2 border-[#B88B72] flex items-center justify-center text-white shadow-xl cursor-pointer hover:scale-105 transition-transform">
+                  <Play className="w-7 h-7 sm:w-8 sm:h-8 fill-white ml-1 text-white" />
+                </div>
+                <h4 className="font-serif text-2xl sm:text-3xl text-[#F8F6F1] font-medium leading-snug">
+                  Artisanal Weaving &amp; Pure Combed Cotton
+                </h4>
+                <p className="text-xs sm:text-sm text-[#C8BFB3] leading-relaxed">
+                  Experience how Pakistan&apos;s finest long-staple cotton is woven into breathable 200–400 thread count bedsheets in Faisalabad, then tailored with deep 14-inch tuck-in drops.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href="/collections"
+                    onClick={() => setLookbookModalOpen(false)}
+                    className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#B88B72] hover:bg-[#a2745d] text-white text-xs font-semibold transition-all shadow-md"
+                  >
+                    <span>Explore All 2026 Collections</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

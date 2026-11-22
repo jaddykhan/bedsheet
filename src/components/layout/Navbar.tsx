@@ -46,10 +46,10 @@ export function Navbar() {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 bg-[#F8F6F1] border-b ${
+        className={`sticky top-0 z-40 w-full transition-all duration-300 bg-white/95 backdrop-blur-md border-b ${
           isScrolled
-            ? "border-[#E8DED0] shadow-sm bg-[#F8F6F1]/95 backdrop-blur-md py-3"
-            : "border-[#E5DFD5] py-4"
+            ? "border-[#E8DED0] shadow-sm py-2.5"
+            : "border-[#ECE5DA] py-3.5"
         }`}
       >
         <div className="container-custom flex items-center justify-between gap-4">

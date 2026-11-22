@@ -42,7 +42,7 @@ export function BrandLogo({
 
   const content = (
     <div className={`inline-flex items-center gap-3 group select-none ${className}`}>
-      {/* Brand-New Luxury Emblem: Royal Loom Shuttle & Cotton Blossom Seal */}
+      {/* Brand-New Luxury Emblem: Lotus & Cotton Blossom Seal (matching reference design) */}
       <div
         className={`${iconDimensions} shrink-0 transition-transform duration-300 ease-out group-hover:scale-105`}
         aria-hidden="true"
@@ -53,58 +53,65 @@ export function BrandLogo({
           xmlns="http://www.w3.org/2000/svg"
           className="w-full h-full"
         >
-          {/* Circular Luxury Ring with Thread Knot Notches */}
-          <circle
-            cx="18"
-            cy="18"
-            r="16"
+          {/* Central Stem */}
+          <path
+            d="M18 24.5V31.5"
+            stroke={isDark ? "#D4AF37" : "#2F4325"}
+            strokeWidth="1.6"
+            strokeLinecap="round"
+          />
+
+          {/* Center Pointed Petal */}
+          <path
+            d="M18 5.5C16.2 11 16.2 19 18 25C19.8 19 19.8 11 18 5.5Z"
+            stroke={isDark ? "#F8F6F1" : "#2F4325"}
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+            fill={isDark ? "#2F4325" : "#FAF8F5"}
+          />
+
+          {/* Left Main Curved Petal */}
+          <path
+            d="M16 10C11.5 13.5 10.5 19 14.5 24C15.8 21 16.2 16 16 10Z"
+            stroke={isDark ? "#F8F6F1" : "#2F4325"}
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+            fill={isDark ? "#2F4325" : "#FAF8F5"}
+          />
+
+          {/* Right Main Curved Petal */}
+          <path
+            d="M20 10C24.5 13.5 25.5 19 21.5 24C20.2 21 19.8 16 20 10Z"
+            stroke={isDark ? "#F8F6F1" : "#2F4325"}
+            strokeWidth="1.6"
+            strokeLinejoin="round"
+            fill={isDark ? "#2F4325" : "#FAF8F5"}
+          />
+
+          {/* Left Base Wing Petal */}
+          <path
+            d="M13.5 21C9 21.5 7.5 25.5 13.5 27.5C14.5 25.5 14.2 23 13.5 21Z"
             stroke={isDark ? "#B88B72" : "#2F4325"}
             strokeWidth="1.5"
-            strokeDasharray="28 2"
-          />
-
-          {/* Central Interlocking Loom Warp & Weft Threads forming 'L' */}
-          <path
-            d="M13 9V24C13 25.5 14 26.5 15.5 26.5H24"
-            stroke={isDark ? "#F8F6F1" : "#2F4325"}
-            strokeWidth="2.2"
-            strokeLinecap="round"
             strokeLinejoin="round"
+            fill={isDark ? "#2F4325" : "#FAF8F5"}
           />
 
-          {/* Cross Shuttle Weave Thread */}
+          {/* Right Base Wing Petal */}
           <path
-            d="M23 11V16C23 17 22 18 20.5 18H13"
-            stroke={isDark ? "#B88B72" : "#B88B72"}
-            strokeWidth="2"
-            strokeLinecap="round"
+            d="M22.5 21C27 21.5 28.5 25.5 22.5 27.5C21.5 25.5 21.8 23 22.5 21Z"
+            stroke={isDark ? "#B88B72" : "#2F4325"}
+            strokeWidth="1.5"
             strokeLinejoin="round"
+            fill={isDark ? "#2F4325" : "#FAF8F5"}
           />
 
-          {/* Artisan Weave Diamond Jewel at Golden Ratio */}
-          <rect
-            x="18"
-            y="14"
-            width="4.5"
-            height="4.5"
-            transform="rotate(45 18 14)"
+          {/* Base Calyx Notch */}
+          <circle
+            cx="18"
+            cy="25"
+            r="1"
             fill={isDark ? "#D4AF37" : "#B88B72"}
-          />
-
-          {/* Top Apex Cotton Blossom Accent */}
-          <circle
-            cx="18"
-            cy="4.5"
-            r="1.75"
-            fill={isDark ? "#B88B72" : "#2F4325"}
-          />
-
-          {/* Bottom Root Stitch Accent */}
-          <circle
-            cx="18"
-            cy="31.5"
-            r="1.2"
-            fill={isDark ? "#B88B72" : "#B88B72"}
           />
         </svg>
       </div>
