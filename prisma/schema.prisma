@@ -1,0 +1,99 @@
+// Prisma schema for Loom & Living Pakistani Home Textiles
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id              String      @id @default(cuid())
+  slug            String      @unique
+  name            String
+  urduName        String?
+  description     String
+  price           Float
+  compareAtPrice  Float?
+  badge           String?     // Bestseller, New Arrival, Top Rated, Limited Stock, Sale
+  category        String      // Printed Bedsheets, Plain & Essentials, Luxury Collection, Bridal Collection
+  fabric          String      // Pure Cotton, Polycotton, Satin, Cambric
+  threadCount     String
+  sizes           String[]    // Single, Double, King
+  images          String[]
+  inStock         Boolean     @default(true)
+  stockCount      Int         @default(25)
+  rating          Float       @default(4.9)
+  reviewCount     Int         @default(0)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  reviews         Review[]
+  orderItems      OrderItem[]
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique // e.g. LL-PK-10492
+  customerName    String
+  customerEmail   String
+  customerPhone   String
+  province        String
+  city            String
+  address         String
+  landmark        String?
+  orderNotes      String?
+  paymentMethod   String      // COD, JazzCash, Easypaisa, Card
+  paymentStatus   String      @default("PENDING") // PENDING, PAID, REFUNDED
+  fulfillmentStatus String    @default("PLACED")  // PLACED, PROCESSING, DISPATCHED, DELIVERED, CANCELLED
+  subtotal        Float
+  shippingFee     Float       @default(0)
+  discount        Float       @default(0)
+  total           Float
+  trackingNumber  String?
+  courier         String?     // TCS, Leopards, Call Courier, Trax
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id              String      @id @default(cuid())
+  orderId         String
+  order           Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId       String?
+  product         Product?    @relation(fields: [productId], references: [id])
+  title           String
+  image           String
+  size            String
+  fabric          String
+  quantity        Int
+  price           Float
+}
+
+model Review {
+  id              String      @id @default(cuid())
+  productId       String
+  product         Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  author          String
+  city            String
+  rating          Int         @default(5)
+  comment         String
+  verified        Boolean     @default(true)
+  isApproved      Boolean     @default(true)
+  createdAt       DateTime    @default(now())
+}
+
+model Subscriber {
+  id              String      @id @default(cuid())
+  email           String      @unique
+  source          String      @default("homepage_banner")
+  createdAt       DateTime    @default(now())
+}
+
+model StoreSetting {
+  id              String      @id @default(cuid())
+  key             String      @unique
+  value           String
+}
