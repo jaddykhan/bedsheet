@@ -158,6 +158,18 @@ export function Navbar() {
                     Heritage Ajrak & Indigo
                   </Link>
                   <Link
+                    href="/collections/blankets-throws"
+                    className="block px-3 py-2 text-sm text-[#292D29] hover:bg-[#F8F6F1] hover:text-[#2F4325] rounded-lg transition-colors font-medium"
+                  >
+                    Blankets &amp; Throws
+                  </Link>
+                  <Link
+                    href="/collections/pillows-cushions"
+                    className="block px-3 py-2 text-sm text-[#292D29] hover:bg-[#F8F6F1] hover:text-[#2F4325] rounded-lg transition-colors font-medium"
+                  >
+                    Pillows &amp; Cushions
+                  </Link>
+                  <Link
                     href="/collections/bridal-collection"
                     className="block px-3 py-2 text-sm text-[#292D29] hover:bg-[#F8F6F1] hover:text-[#2F4325] rounded-lg transition-colors"
                   >

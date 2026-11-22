@@ -7,14 +7,39 @@ export interface Product {
   price: number;
   compareAtPrice?: number;
   badge?: "Bestseller" | "New Arrival" | "Top Rated" | "Limited Stock" | "Sale" | "Hotel Luxury" | "Bridal";
-  category: "Printed Bedsheets" | "Plain & Essentials" | "Luxury Collection" | "Bridal Collection" | "Hotel White & Stripes";
-  fabric: "100% Combed Cotton" | "Cotton Sateen" | "Cotton Percale" | "Fine Cambric" | "Silk Satin" | "Easy-Care Polycotton";
+  category:
+    | "Printed Bedsheets"
+    | "Plain & Essentials"
+    | "Luxury Collection"
+    | "Bridal Collection"
+    | "Hotel White & Stripes"
+    | "Blankets & Throws"
+    | "Pillows & Cushions";
+  fabric:
+    | "100% Combed Cotton"
+    | "Cotton Sateen"
+    | "Cotton Percale"
+    | "Fine Cambric"
+    | "Silk Satin"
+    | "Easy-Care Polycotton"
+    | "100% Cotton Waffle Weave"
+    | "Plush Sherpa Fleece"
+    | "Microfiber Down Alternative"
+    | "Pure Mulberry Silk";
   threadCount: string; // e.g. "300 TC Cotton Sateen", "200 TC Crisp Percale", "400 TC Egyptian Cotton feel"
   sheetTypes: ("Flat Sheet Set" | "Fitted Sheet Set" | "Complete Bed-in-Bag")[];
   sizes: ("Single" | "Double" | "King" | "Super King")[];
   images: string[];
   swatches: { name: string; hex: string }[];
-  pattern: "Floral" | "Stripes" | "Plain Dyed" | "Traditional Ajrak" | "Geometric" | "Embroidered Damask";
+  pattern:
+    | "Floral"
+    | "Stripes"
+    | "Plain Dyed"
+    | "Traditional Ajrak"
+    | "Geometric"
+    | "Embroidered Damask"
+    | "Waffle Texture"
+    | "Solid Soft";
   inStock: boolean;
   stockCount: number;
   rating: number;
@@ -565,6 +590,248 @@ export const PRODUCTS: Product[] = [
       "Air dry or tumble dry low heat only",
     ],
   },
+  // 9. Waffle Weave 100% Cotton Thermal Blanket
+  {
+    id: "prod-9",
+    slug: "waffle-cotton-thermal-blanket",
+    name: "Waffle Weave 100% Cotton Blanket",
+    urduName: "وافل ویو پیور کاٹن تھرمل کمبل",
+    description:
+      "Crafted from 100% combed Pakistani cotton with a dimensional honeycomb waffle weave. Engineered for year-round breathability — provides cozy warmth in winter and lightweight, breathable comfort under summer air-conditioning.",
+    price: 3890,
+    compareAtPrice: 4590,
+    badge: "Bestseller",
+    category: "Blankets & Throws",
+    fabric: "100% Cotton Waffle Weave",
+    threadCount: "350 GSM Heavyweight Breathable Knit",
+    sheetTypes: ["Flat Sheet Set", "Fitted Sheet Set", "Complete Bed-in-Bag"],
+    sizes: ["Single", "Double", "King"],
+    pattern: "Waffle Texture",
+    images: [
+      "/images/products/waffle-cotton-blanket.jpg",
+      "/images/hero/customizer-bed.jpg",
+      "/images/banners/folded-bedsheets.jpg",
+    ],
+    swatches: [
+      { name: "Cream Oatmeal", hex: "#E8DED0" },
+      { name: "Sage Olive", hex: "#526453" },
+      { name: "Terracotta Sand", hex: "#B88B72" },
+    ],
+    inStock: true,
+    stockCount: 38,
+    rating: 4.9,
+    reviewCount: 312,
+    viewersCount: 27,
+    features: [
+      "100% Pure Long-Staple Combed Cotton",
+      "Thermal waffle weave traps optimal warmth without moisture",
+      "Pre-shrunk yarn with self-hemmed durable borders",
+      "Ideal for master bedroom layering or sofa lounging",
+    ],
+    dimensions: {
+      single: {
+        flat: "60 × 90 in",
+        fitted: "60 × 90 in (152 × 228 cm)",
+        pillows: "Single Blanket Throw",
+      },
+      double: {
+        flat: "90 × 95 in",
+        fitted: "90 × 95 in (228 × 241 cm)",
+        pillows: "Double Blanket Throw",
+      },
+      king: {
+        flat: "100 × 108 in",
+        fitted: "100 × 108 in (254 × 274 cm)",
+        pillows: "King Blanket Throw",
+      },
+    },
+    careInstructions: [
+      "Machine wash gentle cycle cold with like colors",
+      "Use mild detergent; do not use chlorine bleach",
+      "Tumble dry low heat or hang dry to preserve waffle structure",
+    ],
+  },
+  // 10. Plush Sherpa Reversible Winter Throw Blanket
+  {
+    id: "prod-10",
+    slug: "plush-sherpa-winter-fleece-throw",
+    name: "Plush Sherpa Reversible Winter Throw",
+    urduName: "پلش شیرپا ونٹر فلیس کمبل",
+    description:
+      "Double-sided luxury: velvet-soft micro flannel on one side and ultra-cozy cloud sherpa wool on the reverse. The ultimate companion for chilly Pakistani winter nights in Quetta, Murree, Islamabad and Lahore.",
+    price: 4490,
+    compareAtPrice: 5290,
+    badge: "Top Rated",
+    category: "Blankets & Throws",
+    fabric: "Plush Sherpa Fleece",
+    threadCount: "480 GSM Dual-Layer Thermal Fleece",
+    sheetTypes: ["Flat Sheet Set", "Fitted Sheet Set", "Complete Bed-in-Bag"],
+    sizes: ["Single", "Double", "King"],
+    pattern: "Solid Soft",
+    images: [
+      "/images/products/plush-sherpa-throw.jpg",
+      "/images/hero/customizer-bed.jpg",
+      "/images/inspiration/modern-minimal.jpg",
+    ],
+    swatches: [
+      { name: "Midnight Indigo", hex: "#1D2D44" },
+      { name: "Forest Olive", hex: "#2F4325" },
+      { name: "Ivory Cloud", hex: "#F8F6F1" },
+    ],
+    inStock: true,
+    stockCount: 24,
+    rating: 5.0,
+    reviewCount: 184,
+    viewersCount: 39,
+    features: [
+      "Dual-sided reversible velvet flannel & faux lamb sherpa",
+      "Anti-pilling, anti-static, and fade-resistant fibers",
+      "Reinforced double-stitched perimeter trim",
+      "Hypoallergenic warm microfiber filling",
+    ],
+    dimensions: {
+      single: {
+        flat: "60 × 80 in",
+        fitted: "60 × 80 in (152 × 203 cm)",
+        pillows: "Throw Blanket",
+      },
+      double: {
+        flat: "90 × 90 in",
+        fitted: "90 × 90 in (228 × 228 cm)",
+        pillows: "Double Blanket",
+      },
+      king: {
+        flat: "90 × 108 in",
+        fitted: "90 × 108 in (228 × 274 cm)",
+        pillows: "King Blanket",
+      },
+    },
+    careInstructions: [
+      "Machine wash separately in cold water on delicate cycle",
+      "Do not iron or dry clean",
+      "Tumble dry with no heat or line dry",
+    ],
+  },
+  // 11. 5-Star Hotel Gusseted Bed Pillow (Pair of 2)
+  {
+    id: "prod-11",
+    slug: "hotel-gusseted-down-pillow-pair",
+    name: "5-Star Hotel Gusseted Pillow Pair",
+    urduName: "فائیو اسٹار ہوٹل گسیٹڈ تکیے (جوڑا)",
+    description:
+      "Experience the pillow loved by Pakistan's premier 5-star hotels. Engineered with a 2-inch breathable side gusset and siliconized micro-cluster down alternative fibers that cradle the neck and never go flat.",
+    price: 2990,
+    compareAtPrice: 3690,
+    badge: "Hotel Luxury",
+    category: "Pillows & Cushions",
+    fabric: "100% Combed Cotton",
+    threadCount: "300 TC Jacquard Cotton Shell",
+    sheetTypes: ["Flat Sheet Set", "Fitted Sheet Set", "Complete Bed-in-Bag"],
+    sizes: ["Single", "Double", "King"],
+    pattern: "Solid Soft",
+    images: [
+      "/images/products/hotel-down-pillows.jpg",
+      "/images/banners/folded-bedsheets.jpg",
+      "/images/hero/hero-bedroom.jpg",
+    ],
+    swatches: [
+      { name: "Crisp Hotel White", hex: "#FFFFFF" },
+    ],
+    inStock: true,
+    stockCount: 52,
+    rating: 4.9,
+    reviewCount: 420,
+    viewersCount: 41,
+    features: [
+      "Pair of 2 gusseted pillows included in package",
+      "2-inch structural gusset promotes ergonomic spinal alignment",
+      "300 TC down-proof combed cotton outer casing",
+      "Anti-dustmite, hypoallergenic 1000g plush fiberfill per pillow",
+    ],
+    dimensions: {
+      single: {
+        flat: "19 × 29 in",
+        fitted: "19 × 29 in (48 × 74 cm)",
+        pillows: "Pair of 2 Standard Pillows",
+      },
+      double: {
+        flat: "19 × 29 in",
+        fitted: "19 × 29 in (48 × 74 cm)",
+        pillows: "Pair of 2 Standard Pillows",
+      },
+      king: {
+        flat: "20 × 36 in",
+        fitted: "20 × 36 in (50 × 90 cm)",
+        pillows: "Pair of 2 King Pillows",
+      },
+    },
+    careInstructions: [
+      "Fluff daily by gently massaging both sides",
+      "Machine wash warm with delicate cycle",
+      "Tumble dry medium with dryer balls until thoroughly dry",
+    ],
+  },
+  // 12. 100% Mulberry Silk Anti-Frizz Pillowcase Duo
+  {
+    id: "prod-12",
+    slug: "mulberry-silk-anti-frizz-pillowcase-duo",
+    name: "Mulberry Silk Pillowcase Duo",
+    urduName: "ملبیری سلک اینٹی فریز تکیہ کور جوڑا",
+    description:
+      "Crafted from genuine 22-Momme Grade 6A pure mulberry silk. Dermatologist-approved to prevent sleep wrinkles, reduce hair breakage, and retain natural skin hydration throughout the night.",
+    price: 2690,
+    compareAtPrice: 3290,
+    badge: "New Arrival",
+    category: "Pillows & Cushions",
+    fabric: "Silk Satin",
+    threadCount: "22 Momme Pure Mulberry Silk",
+    sheetTypes: ["Flat Sheet Set", "Fitted Sheet Set", "Complete Bed-in-Bag"],
+    sizes: ["Single", "Double", "King"],
+    pattern: "Solid Soft",
+    images: [
+      "/images/products/silk-pillowcase-pair.jpg",
+      "/images/fabrics/satin.jpg",
+      "/images/products/quilted-cushion-set.jpg",
+    ],
+    swatches: [
+      { name: "Champagne Pearl", hex: "#E8DED0" },
+      { name: "Blush Rose", hex: "#E6B8B8" },
+      { name: "Onyx Charcoal", hex: "#292D29" },
+    ],
+    inStock: true,
+    stockCount: 30,
+    rating: 5.0,
+    reviewCount: 156,
+    viewersCount: 22,
+    features: [
+      "Pair of 2 silk pillowcases with hidden zipper closure",
+      "Natural organic protein fibers hydrate facial skin",
+      "Friction-free surface prevents bedhead and split ends",
+      "Naturally cooling touch for hot summer nights",
+    ],
+    dimensions: {
+      single: {
+        flat: "19 × 29 in",
+        fitted: "19 × 29 in (48 × 74 cm)",
+        pillows: "Pair of 2 Pillowcases",
+      },
+      double: {
+        flat: "19 × 29 in",
+        fitted: "19 × 29 in (48 × 74 cm)",
+        pillows: "Pair of 2 Pillowcases",
+      },
+      king: {
+        flat: "20 × 36 in",
+        fitted: "20 × 36 in (50 × 90 cm)",
+        pillows: "Pair of 2 King Pillowcases",
+      },
+    },
+    careInstructions: [
+      "Hand wash or machine wash cold in mesh laundry bag",
+      "Use pH neutral silk detergent; never bleach",
+      "Air dry in shade away from direct heat",
+    ],
+  },
 ];
 
 export const CATEGORIES = [
@@ -574,6 +841,20 @@ export const CATEGORIES = [
     description: "Vibrant botanical, floral and geometric Pakistani cotton prints.",
     image: "/images/categories/printed-bedsheets.jpg",
     itemCount: 24,
+  },
+  {
+    title: "Blankets & Throws",
+    slug: "blankets-throws",
+    description: "Breathable cotton waffle blankets, plush sherpa throws, and winter quilts.",
+    image: "/images/categories/blankets-throws.jpg",
+    itemCount: 12,
+  },
+  {
+    title: "Pillows & Cushions",
+    slug: "pillows-cushions",
+    description: "5-star hotel gusseted down pillows, mulberry silk cases, and bed cushions.",
+    image: "/images/categories/pillows-cushions.jpg",
+    itemCount: 16,
   },
   {
     title: "Hotel White & Stripes",
@@ -706,6 +987,28 @@ export const REVIEWS = [
     productName: "Urban Stripe Bedsheet Set",
     productImage: "/images/products/urban-stripe.jpg",
     date: "19 May, 2026",
+  },
+  {
+    id: "rev-5",
+    author: "Fatima R.",
+    city: "Rawalpindi (Bahria Town)",
+    verified: true,
+    rating: 5,
+    text: "Waffle cotton blanket is incredibly breathable! AC mein use karne ke liye perfect weight hai, neither too heavy nor too light. Pure cotton texture looks super aesthetic on the bed.",
+    productName: "Waffle Weave 100% Cotton Blanket",
+    productImage: "/images/products/waffle-cotton-blanket.jpg",
+    date: "22 May, 2026",
+  },
+  {
+    id: "rev-6",
+    author: "Bilal H.",
+    city: "Multan (Cantt)",
+    verified: true,
+    rating: 5,
+    text: "Ordered 2 pairs of hotel gusseted pillows. Neck support is unmatched — exactly like high-end Marriott hotel bedding. No flattening even after weeks of use. 10/10 Pakistani brand!",
+    productName: "5-Star Hotel Gusseted Pillow Pair",
+    productImage: "/images/products/hotel-down-pillows.jpg",
+    date: "25 May, 2026",
   },
 ];
 
