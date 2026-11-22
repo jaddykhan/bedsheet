@@ -19,7 +19,7 @@ export function BuildYourBedSet() {
   const fabricData = {
     "Pure Cotton": {
       name: "Pure Cotton",
-      image: "/images/fabrics/pure-cotton.jpg",
+      image: "/images/fabrics/fabric-pure-cotton-v2.jpg",
       previewBed: "/images/hero/customizer-bed.jpg",
       basePrice: 2200, // Bedsheet
       pillowPrice: 600, // 2 Pillows
@@ -29,7 +29,7 @@ export function BuildYourBedSet() {
     },
     "Polycotton": {
       name: "Polycotton",
-      image: "/images/fabrics/polycotton.jpg",
+      image: "/images/fabrics/fabric-polycotton-v2.jpg",
       previewBed: "/images/hero/customizer-bed-olive.jpg",
       basePrice: 1800,
       pillowPrice: 500,
@@ -39,7 +39,7 @@ export function BuildYourBedSet() {
     },
     "Satin": {
       name: "Satin",
-      image: "/images/fabrics/satin.jpg",
+      image: "/images/fabrics/fabric-satin-v2.jpg",
       previewBed: "/images/hero/customizer-bed-satin.jpg",
       basePrice: 2900,
       pillowPrice: 900,

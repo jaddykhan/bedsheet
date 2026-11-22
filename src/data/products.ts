@@ -888,58 +888,40 @@ export const CATEGORIES = [
 
 export const FABRICS = [
   {
-    name: "100% Combed Cotton",
+    name: "Pure Cotton",
     tagline: "Breathable & Skin-Friendly",
-    image: "/images/fabrics/pure-cotton.jpg",
+    image: "/images/fabrics/fabric-pure-cotton-v2.jpg",
     description:
       "100% natural long-staple Pakistani combed cotton. Highly absorbent, hypoallergenic, and naturally regulates sleep temperature throughout hot summers and mild winters.",
     threadCounts: "200 - 250 TC",
     bestFor: "Daily comfort, sensitive skin, Pakistani summer & all seasons",
   },
   {
-    name: "Cotton Sateen",
-    tagline: "Smooth, Silky Luster",
-    image: "/images/fabrics/satin.jpg",
+    name: "Polycotton",
+    tagline: "Durable & Easy Care",
+    image: "/images/fabrics/fabric-polycotton-v2.jpg",
+    description:
+      "A balanced cotton-polyester blend that withstands heavy family laundering. Quick drying, wrinkle resistant, and requires little to no ironing.",
+    threadCounts: "180 - 200 TC",
+    bestFor: "Busy households, kids' bedrooms, guest rooms, effortless care",
+  },
+  {
+    name: "Satin",
+    tagline: "Smooth & Luxurious",
+    image: "/images/fabrics/fabric-satin-v2.jpg",
     description:
       "Woven with a lustrous four-over-one float yarn structure that creates a glossy surface and silky drape against the skin. Naturally friction-free for hair and skin.",
     threadCounts: "300 - 400 TC",
     bestFor: "5-Star hotel feel, bridal suites, anti-frizz beauty sleep",
   },
   {
-    name: "Cotton Percale",
-    tagline: "Crisp, Matte & Cool",
-    image: "/images/fabrics/cambric.jpg",
-    description:
-      "Classic one-under-one-over weave with a crisp, matte hand feel. Extremely breathable and gets softer with every wash cycle.",
-    threadCounts: "200 - 240 TC",
-    bestFor: "Hot sleepers, crisp hotel linen feel, everyday durability",
-  },
-  {
-    name: "Fine Cambric",
-    tagline: "Lightweight Summer Lawn",
-    image: "/images/fabrics/cambric.jpg",
+    name: "Cambric",
+    tagline: "Lightweight & Comfortable",
+    image: "/images/fabrics/fabric-cambric-v2.jpg",
     description:
       "Very fine, tightly spun combed cotton weave with a slight crisp finish. Incredibly light, cool, and ideal for breezy air-conditioned comfort.",
     threadCounts: "200 - 220 TC",
     bestFor: "Summer nights, crisp hotel feel, modern minimal looks",
-  },
-  {
-    name: "Silk Satin",
-    tagline: "Opulent Festive Luxury",
-    image: "/images/categories/bridal-collection.jpg",
-    description:
-      "High-density bridal fabric with an exquisite radiant gleam. Ideal for wedding gifts, decorative cushions, and formal master bedrooms.",
-    threadCounts: "400 TC High Density",
-    bestFor: "Pakistani wedding trousseaus, bridal suites, festive gifts",
-  },
-  {
-    name: "Easy-Care Polycotton",
-    tagline: "Durable & Wrinkle Free",
-    image: "/images/fabrics/polycotton.jpg",
-    description:
-      "A balanced cotton-polyester blend that withstands heavy family laundering. Quick drying, wrinkle resistant, and requires little to no ironing.",
-    threadCounts: "180 - 200 TC",
-    bestFor: "Busy households, kids' bedrooms, guest rooms, effortless care",
   },
 ];
 
