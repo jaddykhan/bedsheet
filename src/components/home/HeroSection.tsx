@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
   Play,
@@ -28,7 +29,7 @@ export interface HeroSlideData {
   secondaryCta: { label: string; href?: string; isVideo?: boolean };
 }
 
-export interface TrustBenefit {
+export interface TrustBenefitItem {
   icon: React.ElementType;
   title: string;
   description: string;
@@ -42,7 +43,7 @@ const HERO_SLIDES: HeroSlideData[] = [
     titleLine2: "Every Thread",
     subtitle:
       "Discover everyday luxury with beautifully crafted cotton bedsheets.",
-    image: "/images/hero/hero-slide-reference-clean.jpg",
+    image: "/images/hero/hero-slide-1.jpg",
     primaryCta: { label: "Shop Collection", href: "/collections" },
     secondaryCta: { label: "Explore Lookbook", isVideo: true },
   },
@@ -52,8 +53,8 @@ const HERO_SLIDES: HeroSlideData[] = [
     titleLine1: "Elevate Your",
     titleLine2: "Everyday",
     subtitle:
-      "Discover breathable combed cotton woven for everyday luxury and deep rest.",
-    image: "/images/hero/hero-slide-2-landscape.jpg",
+      "Discover breathable combed cotton woven for pure comfort and peaceful sleep.",
+    image: "/images/hero/hero-slide-2.jpg",
     primaryCta: { label: "Shop Collection", href: "/collections/plain-essentials" },
     secondaryCta: { label: "Explore Lookbook", isVideo: true },
   },
@@ -63,14 +64,14 @@ const HERO_SLIDES: HeroSlideData[] = [
     titleLine1: "Tradition Meets",
     titleLine2: "Elegance",
     subtitle:
-      "Discover authentic heritage-inspired patterns celebrating Pakistani craftsmanship.",
-    image: "/images/hero/hero-slide-3-landscape.jpg",
+      "Discover heritage-inspired patterns celebrating authentic Pakistani craftsmanship.",
+    image: "/images/hero/hero-slide-3.jpg",
     primaryCta: { label: "Shop Collection", href: "/collections/luxury-collection" },
     secondaryCta: { label: "Explore Lookbook", href: "/fabric-guide" },
   },
 ];
 
-const TRUST_BENEFITS: TrustBenefit[] = [
+const TRUST_BENEFITS: TrustBenefitItem[] = [
   {
     icon: Sparkles,
     title: "Premium Fabrics",
@@ -99,7 +100,7 @@ export function HeroSection() {
   const [lookbookModalOpen, setLookbookModalOpen] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
 
-  // Touch Swipe tracking
+  // Mobile Touch Swipe tracking
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
@@ -150,7 +151,7 @@ export function HeroSection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextSlide, prevSlide, lookbookModalOpen]);
 
-  // Mobile Touch Swipes
+  // Mobile touch swipe handling
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
   };
@@ -175,7 +176,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative w-full h-[600px] sm:h-[580px] md:h-[660px] lg:h-[720px] xl:h-[740px] overflow-hidden select-none bg-[#FAF8F5]"
+      className="relative isolate overflow-hidden w-full select-none bg-[#FAF8F5] h-[clamp(620px,calc(100svh-128px),760px)] min-h-[580px] md:h-[660px] lg:h-[730px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -186,15 +187,15 @@ export function HeroSection() {
       aria-roledescription="carousel"
       aria-label="Loom & Living Luxury Hero Slider"
     >
-      {/* 1. SEAMLESS EDGE-TO-EDGE PHOTOGRAPHY BACKGROUND */}
-      <div className="absolute inset-0 w-full h-full">
+      {/* LAYER 1: SEAMLESS BACKGROUND PHOTOGRAPHY (z-0) */}
+      <div className="absolute inset-0 z-0 w-full h-full">
         {HERO_SLIDES.map((slide, index) => {
           const isActive = index === currentSlide;
           return (
             <div
               key={slide.id}
               className={`absolute inset-0 w-full h-full transition-opacity duration-800 ease-in-out ${
-                isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
               }`}
               aria-hidden={!isActive}
             >
@@ -209,19 +210,109 @@ export function HeroSection() {
                 sizes="100vw"
                 quality={92}
               />
-
-              {/* Natural-Looking Beige Gradient Wash: Only Behind Text on the Left 40-55% */}
-              <div
-                className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/96 via-[#FAF8F5]/70 sm:via-[#FAF8F5]/45 to-transparent w-full lg:w-[55%] pointer-events-none"
-                aria-hidden="true"
-              />
             </div>
           );
         })}
       </div>
 
-      {/* 2. RIGHT-SIDE VERTICALLY STACKED SLIDER CONTROLS (01 / 03 Counter) */}
-      <div className="absolute right-3 sm:right-6 lg:right-8 top-[42%] -translate-y-1/2 flex flex-col items-center gap-2.5 z-30 pointer-events-auto">
+      {/* LAYER 2: SUBTLE NATURAL-LOOKING GRADIENT OVERLAY (z-1)
+          Covers the hero image smoothly without any rectangular card or hard edge */}
+      <div
+        className="absolute inset-0 z-1 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(90deg, rgba(248,246,241,0.92) 0%, rgba(248,246,241,0.68) 28%, rgba(248,246,241,0.15) 58%, transparent 76%)",
+        }}
+        aria-hidden="true"
+      />
+
+      {/* LAYER 3: STABLE TEXT CONTENT CONTAINER (z-2) */}
+      <div className="relative z-2 h-full container-custom flex flex-col justify-between pt-10 sm:pt-14 md:pt-16 pb-24 sm:pb-28">
+        {/* Animated Single Active Slide Content with mode="wait" to prevent duplication */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentData.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="max-w-[560px] pl-2 sm:pl-4"
+          >
+            {/* Eyebrow label */}
+            <div className="flex items-center gap-3 mb-3">
+              <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#3B4238]">
+                {currentData.badge}
+              </span>
+              <span className="w-10 h-[1.5px] bg-[#3B4238]/40" />
+            </div>
+
+            {/* Large Serif Headline */}
+            <h1 className="font-serif text-[44px] sm:text-[56px] md:text-[68px] lg:text-[78px] font-normal text-[#1F2E19] leading-[1.02] tracking-tight mb-4">
+              <span className="block">{currentData.titleLine1}</span>
+              <span className="block font-medium">{currentData.titleLine2}</span>
+            </h1>
+
+            {/* Subtitle */}
+            <p className="font-sans text-base sm:text-lg md:text-[19px] text-[#3B4238] font-normal leading-relaxed max-w-[480px] mb-7 sm:mb-8">
+              {currentData.subtitle}
+            </p>
+
+            {/* CTA Buttons (Height 52-56px, Border Radius 14px, Gap 16px) */}
+            <div className="flex flex-wrap items-center gap-4 mb-6 sm:mb-8">
+              {/* Primary Dark Olive Button */}
+              <Link
+                href={currentData.primaryCta.href}
+                className="inline-flex items-center gap-2.5 px-7 h-[52px] sm:h-[56px] rounded-[14px] bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+              >
+                <span>{currentData.primaryCta.label}</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+
+              {/* Secondary Explore Lookbook Button */}
+              {currentData.secondaryCta.isVideo ? (
+                <button
+                  onClick={() => setLookbookModalOpen(true)}
+                  className="inline-flex items-center gap-2.5 px-6 h-[52px] sm:h-[56px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+                >
+                  <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
+                  <span>{currentData.secondaryCta.label}</span>
+                </button>
+              ) : (
+                <Link
+                  href={currentData.secondaryCta.href || "/collections"}
+                  className="inline-flex items-center gap-2.5 px-6 h-[52px] sm:h-[56px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+                >
+                  <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
+                  <span>{currentData.secondaryCta.label}</span>
+                </Link>
+              )}
+            </div>
+
+            {/* Small Pagination Dots under content */}
+            <div className="flex items-center gap-2.5 pl-1">
+              {HERO_SLIDES.map((_, idx) => {
+                const isActive = idx === currentSlide;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => goToSlide(idx)}
+                    className={`transition-all duration-300 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325] ${
+                      isActive
+                        ? "w-2.5 h-2.5 bg-[#2F4325] shadow-xs"
+                        : "w-2 h-2 bg-[#C7BFB5] hover:bg-[#8F877C]"
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    aria-current={isActive ? "true" : "false"}
+                  />
+                );
+              })}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* LAYER 4: RIGHT-SIDE NAVIGATION CONTROLS (z-3) */}
+      <div className="absolute right-4 sm:right-7 lg:right-10 top-[40%] -translate-y-1/2 flex flex-col items-center gap-2.5 z-3 pointer-events-auto">
         {/* Next Arrow (Top) */}
         <button
           onClick={nextSlide}
@@ -241,90 +332,15 @@ export function HeroSection() {
         </button>
 
         {/* 01 / 03 Counter */}
-        <span className="text-[11px] sm:text-xs font-semibold text-[#292D29] tracking-wider mt-0.5 select-none bg-white/70 backdrop-blur-xs px-2 py-0.5 rounded-full border border-[#E8DED0]/60">
+        <span className="text-[11px] sm:text-xs font-semibold text-[#292D29] tracking-wider mt-0.5 select-none bg-white/80 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-[#E8DED0]/70 shadow-xs">
           0{currentSlide + 1} / 0{totalSlides}
         </span>
       </div>
 
-      {/* 3. HERO CONTENT CONTAINER (Left-Aligned, Vertically Centered) */}
-      <div className="relative z-20 h-full container-custom flex flex-col justify-between pt-8 sm:pt-12 md:pt-16 pb-20 sm:pb-24">
-        {/* Left Editorial Text Area (40% width) */}
-        <div className="max-w-md sm:max-w-lg lg:max-w-xl pl-2 sm:pl-4">
-          {/* Eyebrow Label with horizontal line */}
-          <div className="flex items-center gap-3 mb-2.5 sm:mb-3">
-            <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#3B4238]">
-              {currentData.badge}
-            </span>
-            <span className="w-10 h-[1.5px] bg-[#3B4238]/40" />
-          </div>
-
-          {/* Large Serif Headline */}
-          <h1 className="font-serif text-[42px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-normal text-[#1F2E19] leading-[1.04] tracking-tight mb-3 sm:mb-4">
-            <span className="block">{currentData.titleLine1}</span>
-            <span className="block font-medium">{currentData.titleLine2}</span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="font-sans text-sm sm:text-base md:text-lg text-[#3B4238] font-normal leading-relaxed max-w-sm sm:max-w-md mb-6 sm:mb-7">
-            {currentData.subtitle}
-          </p>
-
-          {/* Action Buttons (Height 52px, Radius 14px) */}
-          <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 mb-5 sm:mb-6">
-            {/* Primary Dark Olive Button */}
-            <Link
-              href={currentData.primaryCta.href}
-              className="inline-flex items-center gap-2.5 px-7 h-[52px] rounded-[14px] bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
-            >
-              <span>{currentData.primaryCta.label}</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-
-            {/* Secondary Explore Lookbook Button */}
-            {currentData.secondaryCta.isVideo ? (
-              <button
-                onClick={() => setLookbookModalOpen(true)}
-                className="inline-flex items-center gap-2.5 px-6 h-[52px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
-              >
-                <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
-                <span>{currentData.secondaryCta.label}</span>
-              </button>
-            ) : (
-              <Link
-                href={currentData.secondaryCta.href || "/collections"}
-                className="inline-flex items-center gap-2.5 px-6 h-[52px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
-              >
-                <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
-                <span>{currentData.secondaryCta.label}</span>
-              </Link>
-            )}
-          </div>
-
-          {/* Small Left Pagination Dots (Under buttons) */}
-          <div className="flex items-center gap-2 pl-1">
-            {HERO_SLIDES.map((_, idx) => {
-              const isActive = idx === currentSlide;
-              return (
-                <button
-                  key={idx}
-                  onClick={() => goToSlide(idx)}
-                  className={`transition-all duration-300 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325] ${
-                    isActive
-                      ? "w-2.5 h-2.5 bg-[#2F4325] shadow-xs"
-                      : "w-2 h-2 bg-[#C7BFB5] hover:bg-[#8F877C]"
-                  }`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                  aria-current={isActive ? "true" : "false"}
-                />
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* 4. FLOATING TRUST BENEFITS BAR (Near Bottom of Hero, Margin 5%, Bottom 25-35px) */}
-      <div className="absolute bottom-5 sm:bottom-7 md:bottom-8 left-[3%] right-[3%] lg:left-[5%] lg:right-[5%] z-20 pointer-events-auto">
-        <div className="max-w-6xl mx-auto bg-white/95 backdrop-blur-md rounded-[24px] md:rounded-[32px] py-3.5 sm:py-4 px-5 sm:px-8 border border-[#E8DED0]/90 shadow-md">
+      {/* LAYER 5: FLOATING TRUST BENEFITS BAR (z-4)
+          Centered horizontally, Width min(90%, 1450px), Bottom 28px, Radius 28px */}
+      <div className="absolute bottom-6 sm:bottom-7 md:bottom-7 inset-x-0 mx-auto w-[92%] max-w-[1450px] z-4 pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-md rounded-[24px] md:rounded-[28px] py-3.5 sm:py-4 px-5 sm:px-8 border border-[#E8DED0]/90 shadow-md">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:divide-x md:divide-[#E8DED0]/80">
             {TRUST_BENEFITS.map((item) => {
               const Icon = item.icon;
@@ -348,7 +364,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* 5. WATCH LOOKBOOK MODAL */}
+      {/* LOOKBOOK MODAL (High z-index: z-50) */}
       {lookbookModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
@@ -390,7 +406,7 @@ export function HeroSection() {
             {/* Video Showcase Area */}
             <div className="relative aspect-video w-full bg-[#121A0F] flex items-center justify-center overflow-hidden">
               <Image
-                src="/images/hero/hero-slide-reference-clean.jpg"
+                src="/images/hero/hero-slide-1.jpg"
                 alt="Craftsmanship Video Showcase"
                 fill
                 className="object-cover opacity-65"
