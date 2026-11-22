@@ -117,7 +117,7 @@ export function HeroSection() {
     >
       <div className="container-custom pt-4 pb-12 lg:pt-8 lg:pb-16">
         <div className="relative rounded-2xl sm:rounded-3xl lg:rounded-[32px] overflow-hidden bg-[#FAF7F2] border border-[#E8DED0] shadow-sm">
-          {/* Main Slide Presentation */}
+
           <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[500px] sm:min-h-[540px] lg:min-h-[620px] items-center">
             {/* Left Content Area */}
             <div className="lg:col-span-5 p-6 sm:p-10 lg:p-14 z-20 flex flex-col justify-between h-full">
