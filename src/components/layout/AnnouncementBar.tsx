@@ -5,8 +5,8 @@ import { Truck, RotateCcw, ShieldCheck, ChevronDown, MapPin } from "lucide-react
 
 export function AnnouncementBar() {
   return (
-    <div className="bg-[#2F4325] text-[#F8F6F1] text-[11px] sm:text-xs py-2 px-4 border-b border-[#24351c] tracking-wide select-none">
-      <div className="container-custom flex items-center justify-between">
+    <div className="bg-[#2F4325] text-[#F8F6F1] text-[11px] sm:text-xs h-10 flex items-center px-4 border-b border-[#24351c] tracking-wide select-none">
+      <div className="container-custom flex items-center justify-between w-full">
         {/* Left / Center announcement items */}
         <div className="flex-1 flex items-center justify-center gap-3 sm:gap-6 md:gap-8 overflow-x-auto no-scrollbar py-0.5">
           <div className="flex items-center gap-2 whitespace-nowrap">

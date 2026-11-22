@@ -28,6 +28,12 @@ export interface HeroSlideData {
   secondaryCta: { label: string; href?: string; isVideo?: boolean };
 }
 
+export interface TrustBenefit {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}
+
 const HERO_SLIDES: HeroSlideData[] = [
   {
     id: "slide-1",
@@ -43,24 +49,47 @@ const HERO_SLIDES: HeroSlideData[] = [
   {
     id: "slide-2",
     badge: "NEW SEASON COLLECTION",
-    titleLine1: "Bedsheets for",
-    titleLine2: "Every Home",
+    titleLine1: "Elevate Your",
+    titleLine2: "Everyday",
     subtitle:
-      "Premium Pakistani bedsheets in beautiful prints, soft fabrics and perfect fits.",
+      "Discover breathable combed cotton woven for everyday luxury and deep rest.",
     image: "/images/hero/hero-slide-2-landscape.jpg",
-    primaryCta: { label: "Shop Collection", href: "/collections/printed-bedsheets" },
+    primaryCta: { label: "Shop Collection", href: "/collections/plain-essentials" },
     secondaryCta: { label: "Explore Lookbook", isVideo: true },
   },
   {
     id: "slide-3",
     badge: "HERITAGE & LUXURY SUITES",
-    titleLine1: "A Touch of",
-    titleLine2: "Timeless Elegance",
+    titleLine1: "Tradition Meets",
+    titleLine2: "Elegance",
     subtitle:
-      "Discover heritage-inspired patterns for your beautiful home.",
+      "Discover authentic heritage-inspired patterns celebrating Pakistani craftsmanship.",
     image: "/images/hero/hero-slide-3-landscape.jpg",
-    primaryCta: { label: "Discover More", href: "/collections/luxury-collection" },
+    primaryCta: { label: "Shop Collection", href: "/collections/luxury-collection" },
     secondaryCta: { label: "Explore Lookbook", href: "/fabric-guide" },
+  },
+];
+
+const TRUST_BENEFITS: TrustBenefit[] = [
+  {
+    icon: Sparkles,
+    title: "Premium Fabrics",
+    description: "Soft, breathable & durable",
+  },
+  {
+    icon: Truck,
+    title: "Nationwide Delivery",
+    description: "All across Pakistan",
+  },
+  {
+    icon: RotateCcw,
+    title: "Easy Returns",
+    description: "7-day hassle-free returns",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Secure Payments",
+    description: "COD, JazzCash & Easypaisa",
   },
 ];
 
@@ -70,11 +99,11 @@ export function HeroSection() {
   const [lookbookModalOpen, setLookbookModalOpen] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(true);
 
-  // Touch Swipe coordinates
+  // Touch Swipe tracking
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  const SLIDE_INTERVAL = 6000; // 6 seconds auto-transition
+  const SLIDE_INTERVAL = 6000; // 6 seconds auto slide
   const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const totalSlides = HERO_SLIDES.length;
@@ -91,7 +120,7 @@ export function HeroSection() {
     setCurrentSlide(index);
   };
 
-  // Autoplay with pause-on-hover / pause-on-focus
+  // Autoplay management with pause-on-hover / pause-on-focus
   useEffect(() => {
     if (isPaused || lookbookModalOpen) {
       if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
@@ -121,7 +150,7 @@ export function HeroSection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextSlide, prevSlide, lookbookModalOpen]);
 
-  // Touch swipe handling
+  // Mobile Touch Swipes
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
   };
@@ -146,7 +175,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative w-full h-[calc(100vh-96px)] min-h-[560px] max-h-[calc(100vh-96px)] overflow-hidden select-none bg-[#FAF8F5]"
+      className="relative w-full h-[600px] sm:h-[580px] md:h-[660px] lg:h-[720px] xl:h-[740px] overflow-hidden select-none bg-[#FAF8F5]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -157,14 +186,14 @@ export function HeroSection() {
       aria-roledescription="carousel"
       aria-label="Loom & Living Luxury Hero Slider"
     >
-      {/* 1. EDGE-TO-EDGE PHOTOGRAPHY BACKGROUND */}
+      {/* 1. SEAMLESS EDGE-TO-EDGE PHOTOGRAPHY BACKGROUND */}
       <div className="absolute inset-0 w-full h-full">
         {HERO_SLIDES.map((slide, index) => {
           const isActive = index === currentSlide;
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-900 ease-in-out ${
+              className={`absolute inset-0 w-full h-full transition-opacity duration-800 ease-in-out ${
                 isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
               }`}
               aria-hidden={!isActive}
@@ -181,9 +210,9 @@ export function HeroSection() {
                 quality={92}
               />
 
-              {/* Editorial Left-to-Right Ambient Wash: Ensures Pristine Typography Legibility */}
+              {/* Natural-Looking Beige Gradient Wash: Only Behind Text on the Left 40-55% */}
               <div
-                className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/95 via-[#FAF8F5]/70 sm:via-[#FAF8F5]/40 to-transparent w-full lg:w-[62%] pointer-events-none"
+                className="absolute inset-0 bg-gradient-to-r from-[#FAF8F5]/96 via-[#FAF8F5]/70 sm:via-[#FAF8F5]/45 to-transparent w-full lg:w-[55%] pointer-events-none"
                 aria-hidden="true"
               />
             </div>
@@ -191,12 +220,12 @@ export function HeroSection() {
         })}
       </div>
 
-      {/* 2. RIGHT-SIDE VERTICALLY STACKED SLIDER CONTROLS (Matching Screenshot) */}
-      <div className="absolute right-3 sm:right-6 lg:right-8 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 z-30 pointer-events-auto">
+      {/* 2. RIGHT-SIDE VERTICALLY STACKED SLIDER CONTROLS (01 / 03 Counter) */}
+      <div className="absolute right-3 sm:right-6 lg:right-8 top-[42%] -translate-y-1/2 flex flex-col items-center gap-2.5 z-30 pointer-events-auto">
         {/* Next Arrow (Top) */}
         <button
           onClick={nextSlide}
-          className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
           aria-label="Next slide"
         >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5" />
@@ -205,23 +234,23 @@ export function HeroSection() {
         {/* Prev Arrow (Bottom) */}
         <button
           onClick={prevSlide}
-          className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-0.5" />
         </button>
 
-        {/* Numerical Slide Counter */}
-        <span className="text-[11px] sm:text-xs font-semibold text-[#292D29] tracking-wider mt-0.5 select-none bg-white/60 px-2 py-0.5 rounded-full">
+        {/* 01 / 03 Counter */}
+        <span className="text-[11px] sm:text-xs font-semibold text-[#292D29] tracking-wider mt-0.5 select-none bg-white/70 backdrop-blur-xs px-2 py-0.5 rounded-full border border-[#E8DED0]/60">
           0{currentSlide + 1} / 0{totalSlides}
         </span>
       </div>
 
-      {/* 3. HERO CONTENT CONTAINER (Fills 100% of first viewport cleanly) */}
-      <div className="relative z-20 h-full container-custom flex flex-col justify-between pt-6 sm:pt-10 md:pt-12 pb-4 sm:pb-5">
-        {/* Left Editorial Content */}
+      {/* 3. HERO CONTENT CONTAINER (Left-Aligned, Vertically Centered) */}
+      <div className="relative z-20 h-full container-custom flex flex-col justify-between pt-8 sm:pt-12 md:pt-16 pb-20 sm:pb-24">
+        {/* Left Editorial Text Area (40% width) */}
         <div className="max-w-md sm:max-w-lg lg:max-w-xl pl-2 sm:pl-4">
-          {/* Badge with horizontal line */}
+          {/* Eyebrow Label with horizontal line */}
           <div className="flex items-center gap-3 mb-2.5 sm:mb-3">
             <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#3B4238]">
               {currentData.badge}
@@ -229,23 +258,23 @@ export function HeroSection() {
             <span className="w-10 h-[1.5px] bg-[#3B4238]/40" />
           </div>
 
-          {/* Large Editorial Serif Headline */}
-          <h1 className="font-serif text-[40px] sm:text-5xl md:text-6xl lg:text-[70px] xl:text-[76px] font-normal text-[#1F2E19] leading-[1.04] tracking-tight mb-3 sm:mb-4">
+          {/* Large Serif Headline */}
+          <h1 className="font-serif text-[42px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-normal text-[#1F2E19] leading-[1.04] tracking-tight mb-3 sm:mb-4">
             <span className="block">{currentData.titleLine1}</span>
             <span className="block font-medium">{currentData.titleLine2}</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="font-sans text-xs sm:text-sm md:text-base text-[#3B4238] font-normal leading-relaxed max-w-sm sm:max-w-md mb-5 sm:mb-6">
+          <p className="font-sans text-sm sm:text-base md:text-lg text-[#3B4238] font-normal leading-relaxed max-w-sm sm:max-w-md mb-6 sm:mb-7">
             {currentData.subtitle}
           </p>
 
-          {/* Buttons */}
+          {/* Action Buttons (Height 52px, Radius 14px) */}
           <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 mb-5 sm:mb-6">
-            {/* Primary Dark Olive Pill Button */}
+            {/* Primary Dark Olive Button */}
             <Link
               href={currentData.primaryCta.href}
-              className="inline-flex items-center gap-2 px-6 sm:px-7 py-2.5 sm:py-3 rounded-full bg-[#2F4325] text-white text-xs sm:text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group"
+              className="inline-flex items-center gap-2.5 px-7 h-[52px] rounded-[14px] bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
             >
               <span>{currentData.primaryCta.label}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -255,7 +284,7 @@ export function HeroSection() {
             {currentData.secondaryCta.isVideo ? (
               <button
                 onClick={() => setLookbookModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#FDFBF7] hover:bg-white text-[#292D29] text-xs sm:text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95"
+                className="inline-flex items-center gap-2.5 px-6 h-[52px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
               >
                 <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
                 <span>{currentData.secondaryCta.label}</span>
@@ -263,7 +292,7 @@ export function HeroSection() {
             ) : (
               <Link
                 href={currentData.secondaryCta.href || "/collections"}
-                className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#FDFBF7] hover:bg-white text-[#292D29] text-xs sm:text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95"
+                className="inline-flex items-center gap-2.5 px-6 h-[52px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
               >
                 <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
                 <span>{currentData.secondaryCta.label}</span>
@@ -271,7 +300,7 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Left Pagination Dots (Under the buttons, exactly as in reference) */}
+          {/* Small Left Pagination Dots (Under buttons) */}
           <div className="flex items-center gap-2 pl-1">
             {HERO_SLIDES.map((_, idx) => {
               const isActive = idx === currentSlide;
@@ -291,71 +320,30 @@ export function HeroSection() {
             })}
           </div>
         </div>
+      </div>
 
-        {/* 4. FLOATING UNIFIED TRUST CAPSULE BAR (Inside the hero at the bottom) */}
-        <div className="w-full max-w-6xl mx-auto z-20">
-          <div className="bg-white/95 backdrop-blur-md rounded-2xl md:rounded-full py-3 sm:py-3.5 px-4 sm:px-8 border border-[#E8DED0]/90 shadow-md">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:divide-x md:divide-[#E8DED0]/80">
-              {/* Feature 1: Premium Fabrics */}
-              <div className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
-                <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
-                  <Sparkles className="w-4 h-4 text-[#2F4325]" />
+      {/* 4. FLOATING TRUST BENEFITS BAR (Near Bottom of Hero, Margin 5%, Bottom 25-35px) */}
+      <div className="absolute bottom-5 sm:bottom-7 md:bottom-8 left-[3%] right-[3%] lg:left-[5%] lg:right-[5%] z-20 pointer-events-auto">
+        <div className="max-w-6xl mx-auto bg-white/95 backdrop-blur-md rounded-[24px] md:rounded-[32px] py-3.5 sm:py-4 px-5 sm:px-8 border border-[#E8DED0]/90 shadow-md">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:divide-x md:divide-[#E8DED0]/80">
+            {TRUST_BENEFITS.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div key={item.title} className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
+                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
+                    <Icon className="w-4 h-4 text-[#2F4325]" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
+                      {item.title}
+                    </span>
+                    <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
+                      {item.description}
+                    </span>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
-                    Premium Fabrics
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
-                    Soft, breathable &amp; durable
-                  </span>
-                </div>
-              </div>
-
-              {/* Feature 2: Nationwide Delivery */}
-              <div className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
-                <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
-                  <Truck className="w-4 h-4 text-[#2F4325]" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
-                    Nationwide Delivery
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
-                    All across Pakistan
-                  </span>
-                </div>
-              </div>
-
-              {/* Feature 3: Easy Returns */}
-              <div className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
-                <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
-                  <RotateCcw className="w-4 h-4 text-[#2F4325]" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
-                    Easy Returns
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
-                    7-day hassle-free returns
-                  </span>
-                </div>
-              </div>
-
-              {/* Feature 4: Secure Payments */}
-              <div className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
-                <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
-                  <ShieldCheck className="w-4 h-4 text-[#2F4325]" />
-                </div>
-                <div className="min-w-0">
-                  <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
-                    Secure Payments
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
-                    COD, JazzCash &amp; Easypaisa
-                  </span>
-                </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
