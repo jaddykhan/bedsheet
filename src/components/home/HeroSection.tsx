@@ -64,7 +64,7 @@ const HERO_SLIDES: HeroSlideData[] = [
     titleLine1: "Tradition Meets",
     titleLine2: "Elegance",
     subtitle:
-      "Discover heritage-inspired patterns celebrating authentic Pakistani craftsmanship.",
+      "Discover authentic heritage-inspired patterns celebrating authentic Pakistani craftsmanship.",
     image: "/images/hero/hero-slide-3.jpg",
     primaryCta: { label: "Shop Collection", href: "/collections/luxury-collection" },
     secondaryCta: { label: "Explore Lookbook", href: "/fabric-guide" },
@@ -176,7 +176,7 @@ export function HeroSection() {
 
   return (
     <section
-      className="relative isolate overflow-hidden w-full select-none bg-[#FAF8F5] h-[clamp(620px,calc(100svh-128px),760px)] min-h-[580px] md:h-[660px] lg:h-[730px]"
+      className="relative isolate overflow-hidden w-full select-none bg-[#FAF8F5] h-[calc(100vh-112px)] sm:h-[calc(100svh-112px)] min-h-[500px] max-h-[calc(100vh-112px)]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -215,8 +215,7 @@ export function HeroSection() {
         })}
       </div>
 
-      {/* LAYER 2: SUBTLE NATURAL-LOOKING GRADIENT OVERLAY (z-1)
-          Covers the hero image smoothly without any rectangular card or hard edge */}
+      {/* LAYER 2: NATURAL-LOOKING SUBTLE GRADIENT OVERLAY (z-1) */}
       <div
         className="absolute inset-0 z-1 pointer-events-none"
         style={{
@@ -226,20 +225,20 @@ export function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* LAYER 3: STABLE TEXT CONTENT CONTAINER (z-2) */}
-      <div className="relative z-2 h-full container-custom flex flex-col justify-between pt-10 sm:pt-14 md:pt-16 pb-24 sm:pb-28">
-        {/* Animated Single Active Slide Content with mode="wait" to prevent duplication */}
+      {/* LAYER 3: STABLE TEXT CONTENT CONTAINER (z-2)
+          Vertically centered with generous bottom clearance for the floating trust bar */}
+      <div className="relative z-2 h-full container-custom flex flex-col justify-center pt-2 sm:pt-4 pb-20 sm:pb-22">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentData.id}
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="max-w-[560px] pl-2 sm:pl-4"
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.45, ease: "easeOut" }}
+            className="max-w-[540px] pl-2 sm:pl-4"
           >
-            {/* Eyebrow label */}
-            <div className="flex items-center gap-3 mb-3">
+            {/* Eyebrow Label with horizontal line */}
+            <div className="flex items-center gap-3 mb-2 sm:mb-2.5">
               <span className="text-[10px] sm:text-xs font-bold tracking-[0.24em] uppercase text-[#3B4238]">
                 {currentData.badge}
               </span>
@@ -247,22 +246,22 @@ export function HeroSection() {
             </div>
 
             {/* Large Serif Headline */}
-            <h1 className="font-serif text-[44px] sm:text-[56px] md:text-[68px] lg:text-[78px] font-normal text-[#1F2E19] leading-[1.02] tracking-tight mb-4">
+            <h1 className="font-serif text-[38px] sm:text-[48px] md:text-[58px] lg:text-[66px] xl:text-[72px] font-normal text-[#1F2E19] leading-[1.03] tracking-tight mb-2.5 sm:mb-3">
               <span className="block">{currentData.titleLine1}</span>
               <span className="block font-medium">{currentData.titleLine2}</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="font-sans text-base sm:text-lg md:text-[19px] text-[#3B4238] font-normal leading-relaxed max-w-[480px] mb-7 sm:mb-8">
+            <p className="font-sans text-xs sm:text-sm md:text-base text-[#3B4238] font-normal leading-relaxed max-w-[450px] mb-5 sm:mb-6">
               {currentData.subtitle}
             </p>
 
-            {/* CTA Buttons (Height 52-56px, Border Radius 14px, Gap 16px) */}
-            <div className="flex flex-wrap items-center gap-4 mb-6 sm:mb-8">
+            {/* Action Buttons (Height 48-52px, Radius 12px, Gap 16px) */}
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4 sm:mb-5">
               {/* Primary Dark Olive Button */}
               <Link
                 href={currentData.primaryCta.href}
-                className="inline-flex items-center gap-2.5 px-7 h-[52px] sm:h-[56px] rounded-[14px] bg-[#2F4325] text-white text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+                className="inline-flex items-center gap-2 px-6 sm:px-7 h-[46px] sm:h-[50px] rounded-[12px] bg-[#2F4325] text-white text-xs sm:text-sm font-semibold hover:bg-[#203118] transition-all shadow-md hover:shadow-lg active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
               >
                 <span>{currentData.primaryCta.label}</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -272,7 +271,7 @@ export function HeroSection() {
               {currentData.secondaryCta.isVideo ? (
                 <button
                   onClick={() => setLookbookModalOpen(true)}
-                  className="inline-flex items-center gap-2.5 px-6 h-[52px] sm:h-[56px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 h-[46px] sm:h-[50px] rounded-[12px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-xs sm:text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
                 >
                   <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
                   <span>{currentData.secondaryCta.label}</span>
@@ -280,7 +279,7 @@ export function HeroSection() {
               ) : (
                 <Link
                   href={currentData.secondaryCta.href || "/collections"}
-                  className="inline-flex items-center gap-2.5 px-6 h-[52px] sm:h-[56px] rounded-[14px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+                  className="inline-flex items-center gap-2 px-5 sm:px-6 h-[46px] sm:h-[50px] rounded-[12px] bg-[#F8F6F1] hover:bg-white text-[#292D29] text-xs sm:text-sm font-medium border border-[#D5C7B6] transition-all shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
                 >
                   <Play className="w-3.5 h-3.5 fill-[#292D29] translate-x-0.5" />
                   <span>{currentData.secondaryCta.label}</span>
@@ -288,8 +287,8 @@ export function HeroSection() {
               )}
             </div>
 
-            {/* Small Pagination Dots under content */}
-            <div className="flex items-center gap-2.5 pl-1">
+            {/* Small Left Pagination Dots (Under buttons) */}
+            <div className="flex items-center gap-2 pl-1">
               {HERO_SLIDES.map((_, idx) => {
                 const isActive = idx === currentSlide;
                 return (
@@ -311,12 +310,12 @@ export function HeroSection() {
         </AnimatePresence>
       </div>
 
-      {/* LAYER 4: RIGHT-SIDE NAVIGATION CONTROLS (z-3) */}
-      <div className="absolute right-4 sm:right-7 lg:right-10 top-[40%] -translate-y-1/2 flex flex-col items-center gap-2.5 z-3 pointer-events-auto">
+      {/* LAYER 4: RIGHT-SIDE VERTICALLY STACKED CONTROLS (z-3) */}
+      <div className="absolute right-3 sm:right-6 lg:right-8 top-[42%] -translate-y-1/2 flex flex-col items-center gap-2 z-3 pointer-events-auto">
         {/* Next Arrow (Top) */}
         <button
           onClick={nextSlide}
-          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
           aria-label="Next slide"
         >
           <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:translate-x-0.5" />
@@ -325,35 +324,35 @@ export function HeroSection() {
         {/* Prev Arrow (Bottom) */}
         <button
           onClick={prevSlide}
-          className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/95 backdrop-blur-md shadow-md border border-[#E8DED0]/80 flex items-center justify-center text-[#292D29] hover:bg-[#2F4325] hover:text-white transition-all duration-200 active:scale-95 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2F4325]"
           aria-label="Previous slide"
         >
           <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 transition-transform group-hover:-translate-x-0.5" />
         </button>
 
         {/* 01 / 03 Counter */}
-        <span className="text-[11px] sm:text-xs font-semibold text-[#292D29] tracking-wider mt-0.5 select-none bg-white/80 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-[#E8DED0]/70 shadow-xs">
+        <span className="text-[10px] sm:text-[11px] font-semibold text-[#292D29] tracking-wider select-none bg-white/80 backdrop-blur-xs px-2 py-0.5 rounded-full border border-[#E8DED0]/70 shadow-xs">
           0{currentSlide + 1} / 0{totalSlides}
         </span>
       </div>
 
       {/* LAYER 5: FLOATING TRUST BENEFITS BAR (z-4)
-          Centered horizontally, Width min(90%, 1450px), Bottom 28px, Radius 28px */}
-      <div className="absolute bottom-6 sm:bottom-7 md:bottom-7 inset-x-0 mx-auto w-[92%] max-w-[1450px] z-4 pointer-events-auto">
-        <div className="bg-white/95 backdrop-blur-md rounded-[24px] md:rounded-[28px] py-3.5 sm:py-4 px-5 sm:px-8 border border-[#E8DED0]/90 shadow-md">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 md:divide-x md:divide-[#E8DED0]/80">
+          Guaranteed 100% visible inside the first view near the bottom edge */}
+      <div className="absolute bottom-3 sm:bottom-4 md:bottom-5 inset-x-0 mx-auto w-[94%] max-w-[1380px] z-4 pointer-events-auto">
+        <div className="bg-white/95 backdrop-blur-md rounded-[20px] md:rounded-full py-2.5 sm:py-3 px-4 sm:px-7 border border-[#E8DED0]/90 shadow-md">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 md:divide-x md:divide-[#E8DED0]/80">
             {TRUST_BENEFITS.map((item) => {
               const Icon = item.icon;
               return (
-                <div key={item.title} className="flex items-center gap-2.5 sm:gap-3 px-1 md:px-3">
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
-                    <Icon className="w-4 h-4 text-[#2F4325]" />
+                <div key={item.title} className="flex items-center gap-2 sm:gap-2.5 px-1 md:px-3">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FAF7F2] border border-[#E8DED0] flex items-center justify-center text-[#2F4325] shrink-0">
+                    <Icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#2F4325]" />
                   </div>
                   <div className="min-w-0">
-                    <span className="text-xs sm:text-sm font-bold text-[#292D29] block truncate">
+                    <span className="text-xs sm:text-[13px] font-bold text-[#292D29] block truncate">
                       {item.title}
                     </span>
-                    <span className="text-[10px] sm:text-xs text-[#6B7267] block truncate">
+                    <span className="text-[10px] sm:text-[11px] text-[#6B7267] block truncate">
                       {item.description}
                     </span>
                   </div>
@@ -364,7 +363,7 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* LOOKBOOK MODAL (High z-index: z-50) */}
+      {/* LOOKBOOK MODAL (z-50) */}
       {lookbookModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
@@ -373,7 +372,6 @@ export function HeroSection() {
           aria-label="Loom & Living Craftsmanship Story"
         >
           <div className="relative w-full max-w-3xl bg-[#1E2C18] rounded-3xl overflow-hidden shadow-2xl border border-[#2F4325]">
-            {/* Modal Header */}
             <div className="p-4 sm:p-5 flex items-center justify-between border-b border-[#2F4325] text-white">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -403,7 +401,6 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Video Showcase Area */}
             <div className="relative aspect-video w-full bg-[#121A0F] flex items-center justify-center overflow-hidden">
               <Image
                 src="/images/hero/hero-slide-1.jpg"
